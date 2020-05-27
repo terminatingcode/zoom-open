@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -e
+
+source ./meetings.conf
+
+room=$1
+id=
+command=
+
+if [[ "$OSTYPE" = darwin* ]]; then
+  command="open"
+else
+  command="xdg-open"
+fi
+
+if [[ -z "$room" ]]; then
+  echo "please specify a room"
+else
+  for i in "${!meetings[@]}"; do
+   if [[ "${meetings[$i]}" = "${room}" ]]; then
+       id="${ids[$i]}"
+       echo "opening zoom id: $id"
+   fi
+
+done
+   if [[ -z $id ]]; then
+     echo "meeting id not in config"
+   else
+    $command "zoommtg://zoom.us/join?action=join&confno=${id}"
+   fi
+fi
+
